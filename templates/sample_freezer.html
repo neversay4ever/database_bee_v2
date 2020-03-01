@@ -1,0 +1,25 @@
+{% extends '_base.html' %}
+{% load static %}
+
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/sb-admin-2.css' %}">
+<link rel="stylesheet" href="{% static 'css/google_font.css' %}">
+<script src="{% static 'js/sb-admin-2.js' %}"></script>
+<script src="{% static 'js/jquery.easing.js' %}"></script>
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+{% endblock css%}
+
+{% block title %}Sample Freezer{% endblock title %}
+
+{% block content %}
+<div id="wrapper">
+    <div class="container">
+        {% autoescape off %}
+        {{ freezer_plt_div }}
+        {% endautoescape %}
+    </div>
+</div>
+{% endblock content %}

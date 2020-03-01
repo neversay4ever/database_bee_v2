@@ -1,0 +1,765 @@
+<!-- /templates/admin/sale_summary_change_list.html -->
+
+{% extends "admin/change_list.html" %}
+{% load humanize %}
+{% load static %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/bootstrap.4.4.1.min.css' %}">
+{% endblock %}
+
+
+{% block extrahead %}
+{{ block.super }}
+<!-- Bootstrap JavaScript -->
+<script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+<script src="{% static 'js/poper.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+<script src="{% static 'js/highcharts/highcharts.js' %}"></script>
+<script src="{% static 'js/highcharts/series-label.js' %}"></script>
+<script src="{% static 'js/highcharts/exporting.js' %}"></script>
+<script src="{% static 'js/highcharts/export-data.js' %}"></script>
+
+{% endblock %}
+
+{% block object-tools %}{% endblock %}
+
+
+{% block content_title %}
+<div class="jumbotron">
+    <h1 class="display-6">蜜蜂样本统计 <span style='color:orange'>{{cl.queryset|length|intcomma}}</span>份</h1>
+</div>
+{% endblock %}
+
+{% block result_list %}
+<!-- Our content goes here... -->
+<ul style='width:79%'>
+    <div id='geo'>
+        <h6 class="section-title h1">样本地理位置分布</h6>
+        <nav>
+            <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                <a class="nav-item nav-link active" id="country_sample-tab" data-toggle="tab"
+                    href="#country_sample_count" role="tab" aria-controls="nav-home" aria-selected="true">样本-国家分布</a>
+                <a class="nav-item nav-link" id="province_sample-tab" data-toggle="tab" href="#province_sample_count"
+                    role="tab" aria-controls="nav-profile" aria-selected="false">样本-省份分布</a>
+                <a class="nav-item nav-link" id="county_sample-tab" data-toggle="tab" href="#city_sample_count"
+                    role="tab" aria-controls="nav-contact" aria-selected="false">样本-城市分布</a>
+                <a class="nav-item nav-link" id="location_sample-tab" data-toggle="tab" href="#county_sample_count"
+                    role="tab" aria-controls="nav-about" aria-selected="false">样本-县分布</a>
+            </div>
+        </nav>
+        <div class="tab-content py-3 px-3 px-sm-0" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="country_sample_count" role="tabpanel"
+                aria-labelledby="country_sample-tab">
+
+            </div>
+            <div class="tab-pane fade" id="province_sample_count" role="tabpanel" aria-labelledby="province_sample-tab">
+
+            </div>
+            <div class="tab-pane fade" id="city_sample_count" role="tabpanel" aria-labelledby="city_sample-tab">
+                {{city_total|length}}
+            </div>
+            <div class="tab-pane fade" id="county_sample_count" role="tabpanel" aria-labelledby="county_sample-tab">
+                {{county_total|length}}
+            </div>
+        </div>
+    </div>
+    <br />
+    <div id='taxnomy'>
+        <h6 class="section-title h1">样本进化关系分布</h6>
+        <nav>
+            <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                <a class="nav-item nav-link active" id="class_sample-tab" data-toggle="tab" href="#class_sample_count"
+                    role="tab" aria-controls="nav-class" aria-selected="true">纲Class</a>
+                <a class="nav-item nav-link" id="order_sample-tab" data-toggle="tab" href="#order_sample_count"
+                    role="tab" aria-controls="nav-order" aria-selected="false">目Order</a>
+                <a class="nav-item nav-link" id="family_sample-tab" data-toggle="tab" href="#family_sample_count"
+                    role="tab" aria-controls="nav-family" aria-selected="false">科Family</a>
+                <a class="nav-item nav-link" id="genus_sample-tab" data-toggle="tab" href="#genus_sample_count"
+                    role="tab" aria-controls="nav-genus" aria-selected="false">属Genus</a>
+                <a class="nav-item nav-link" id="species_sample-tab" data-toggle="tab" href="#species_sample_count"
+                    role="tab" aria-controls="nav-species" aria-selected="false">种Species</a>
+                <a class="nav-item nav-link" id="subspecies_sample-tab" data-toggle="tab"
+                    href="#subspecies_sample_count" role="tab" aria-controls="nav-subspecies"
+                    aria-selected="false">亚种Subspecies</a>
+                <a class="nav-item nav-link" id="breed_sample-tab" data-toggle="tab" href="#breed_sample_count"
+                    role="tab" aria-controls="nav-breed" aria-selected="false">品种Breed</a>
+            </div>
+        </nav>
+        <div class="tab-content py-3 px-3 px-sm-0" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="class_sample_count" role="tabpanel"
+                aria-labelledby="class_sample-tab">
+            </div>
+            <div class="tab-pane fade" id="order_sample_count" role="tabpanel" aria-labelledby="order_sample-tab">
+            </div>
+            <div class="tab-pane fade" id="family_sample_count" role="tabpanel" aria-labelledby="family_sample-tab">
+            </div>
+            <div class="tab-pane fade" id="genus_sample_count" role="tabpanel" aria-labelledby="genus_sample-tab">
+            </div>
+            <div class="tab-pane fade" id="species_sample_count" role="tabpanel" aria-labelledby="species_sample-tab">
+            </div>
+            <div class="tab-pane fade" id="subspecies_sample_count" role="tabpanel"
+                aria-labelledby="subspecies_sample-tab">
+            </div>
+            <div class="tab-pane fade" id="breed_sample_count" role="tabpanel" aria-labelledby="breed_sample-tab">
+            </div>
+        </div>
+    </div>
+
+
+
+
+    {% endblock %}
+
+    {% block pagination %}{% endblock %}
+
+
+
+    {% block footer %}
+
+    <script type="text/javascript">
+
+        Highcharts.chart('country_sample_count', {
+            chart: {
+                type: 'bar'
+            },
+            title: {
+                text: '有效样本数 {{country_total|length}}'
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: {
+                categories: {{ country_name| safe}},
+            title: {
+            text: '国家'
+        }
+        },
+            yAxis: {
+            min: 0,
+            title: {
+                text: '样本数',
+                align: 'high'
+            },
+            labels: {
+                overflow: 'justify'
+            }
+        },
+            tooltip: {
+            valueSuffix: ''
+        },
+            plotOptions: {
+            bar: {
+                dataLabels: {
+                    enabled: true
+                }
+            }
+        },
+            legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'top',
+            x: -40,
+            y: 80,
+            floating: true,
+            borderWidth: 1,
+            backgroundColor:
+                Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
+            shadow: true
+        },
+            credits: {
+            enabled: false
+        },
+            series: [{
+                name: '国家',
+                data: {{ country_count| safe}}
+        }]
+    });
+
+        Highcharts.chart('province_sample_count', {
+            chart: {
+                type: 'bar'
+            },
+            title: {
+                text: '有效样本数 {{province_total|length}}'
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: {
+                categories: {{ province_name| safe}},
+            title: {
+            text: '州、省份'
+        }
+        },
+            yAxis: {
+            min: 0,
+            title: {
+                text: '样本数',
+                align: 'high'
+            },
+            labels: {
+                overflow: 'justify'
+            }
+        },
+            tooltip: {
+            valueSuffix: ''
+        },
+            plotOptions: {
+            bar: {
+                dataLabels: {
+                    enabled: true
+                }
+            }
+        },
+            legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'top',
+            x: -40,
+            y: 80,
+            floating: true,
+            borderWidth: 1,
+            backgroundColor:
+                Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
+            shadow: true
+        },
+            credits: {
+            enabled: false
+        },
+            series: [{
+                name: '州、省份',
+                data: {{ province_count| safe}}
+        }]
+    });
+
+
+        Highcharts.chart('city_sample_count', {
+            chart: {
+                type: 'bar'
+            },
+            title: {
+                text: '有效样本数 {{city_total|length}}'
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: {
+                categories: {{ city_name| safe}},
+            title: {
+            text: '城市'
+        }
+        },
+            yAxis: {
+            min: 0,
+            title: {
+                text: '样本数',
+                align: 'high'
+            },
+            labels: {
+                overflow: 'justify'
+            }
+        },
+            tooltip: {
+            valueSuffix: ''
+        },
+            plotOptions: {
+            bar: {
+                dataLabels: {
+                    enabled: true
+                }
+            }
+        },
+            legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'top',
+            x: -40,
+            y: 80,
+            floating: true,
+            borderWidth: 1,
+            backgroundColor:
+                Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
+            shadow: true
+        },
+            credits: {
+            enabled: false
+        },
+            series: [{
+                name: '城市',
+                data: {{ city_count| safe}}
+        }]
+    });
+
+
+        Highcharts.chart('county_sample_count', {
+            chart: {
+                type: 'bar'
+            },
+            title: {
+                text: '有效样本数 {{county_total|length}}'
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: {
+                categories: {{ county_name| safe}},
+            title: {
+            text: '县'
+        }
+        },
+            yAxis: {
+            min: 0,
+            title: {
+                text: '样本数',
+                align: 'high'
+            },
+            labels: {
+                overflow: 'justify'
+            }
+        },
+            tooltip: {
+            valueSuffix: ''
+        },
+            plotOptions: {
+            bar: {
+                dataLabels: {
+                    enabled: true
+                }
+            }
+        },
+            legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'top',
+            x: -40,
+            y: 80,
+            floating: true,
+            borderWidth: 1,
+            backgroundColor:
+                Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
+            shadow: true
+        },
+            credits: {
+            enabled: false
+        },
+            series: [{
+                name: '县',
+                data: {{ county_count| safe}}
+        }]
+    });
+
+    </script>
+
+    <script type="text/javascript">
+
+        Highcharts.chart('class_sample_count', {
+            chart: {
+                type: 'bar'
+            },
+            title: {
+                text: '有效样本数 {{sample_class_total|length}}'
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: {
+                categories: {{ sample_class_name| safe}},
+            title: {
+            text: '纲'
+        }
+            },
+            yAxis: {
+            min: 0,
+            title: {
+                text: '样本数',
+                align: 'high'
+            },
+            labels: {
+                overflow: 'justify'
+            }
+        },
+            tooltip: {
+            valueSuffix: ''
+        },
+            plotOptions: {
+            bar: {
+                dataLabels: {
+                    enabled: true
+                }
+            }
+        },
+            legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'top',
+            x: -40,
+            y: 80,
+            floating: true,
+            borderWidth: 1,
+            backgroundColor:
+                Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
+            shadow: true
+        },
+            credits: {
+            enabled: false
+        },
+            series: [{
+                name: '纲',
+                data: {{ sample_class_count| safe}}
+            }]
+        });
+
+        Highcharts.chart('order_sample_count', {
+            chart: {
+                type: 'bar'
+            },
+            title: {
+                text: '有效样本数 {{sample_order_total|length}}'
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: {
+                categories: {{ sample_order_name| safe}},
+            title: {
+            text: '目'
+        }
+            },
+            yAxis: {
+            min: 0,
+            title: {
+                text: '样本数',
+                align: 'high'
+            },
+            labels: {
+                overflow: 'justify'
+            }
+        },
+            tooltip: {
+            valueSuffix: ''
+        },
+            plotOptions: {
+            bar: {
+                dataLabels: {
+                    enabled: true
+                }
+            }
+        },
+            legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'top',
+            x: -40,
+            y: 80,
+            floating: true,
+            borderWidth: 1,
+            backgroundColor:
+                Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
+            shadow: true
+        },
+            credits: {
+            enabled: false
+        },
+            series: [{
+                name: '目',
+                data: {{ sample_order_count| safe}}
+            }]
+        });
+
+
+        Highcharts.chart('family_sample_count', {
+            chart: {
+                type: 'bar'
+            },
+            title: {
+                text: '有效样本数 {{sample_family_total|length}}'
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: {
+                categories: {{ sample_family_name| safe}},
+            title: {
+            text: '科'
+        }
+            },
+            yAxis: {
+            min: 0,
+            title: {
+                text: '样本数',
+                align: 'high'
+            },
+            labels: {
+                overflow: 'justify'
+            }
+        },
+            tooltip: {
+            valueSuffix: ''
+        },
+            plotOptions: {
+            bar: {
+                dataLabels: {
+                    enabled: true
+                }
+            }
+        },
+            legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'top',
+            x: -40,
+            y: 80,
+            floating: true,
+            borderWidth: 1,
+            backgroundColor:
+                Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
+            shadow: true
+        },
+            credits: {
+            enabled: false
+        },
+            series: [{
+                name: '科',
+                data: {{ sample_family_count| safe}}
+            }]
+        });
+
+
+        Highcharts.chart('genus_sample_count', {
+            chart: {
+                type: 'bar'
+            },
+            title: {
+                text: '有效样本数 {{sample_genus_total|length}}'
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: {
+                categories: {{ sample_genus_name| safe}},
+            title: {
+            text: '属'
+        }
+            },
+            yAxis: {
+            min: 0,
+            title: {
+                text: '样本数',
+                align: 'high'
+            },
+            labels: {
+                overflow: 'justify'
+            }
+        },
+            tooltip: {
+            valueSuffix: ''
+        },
+            plotOptions: {
+            bar: {
+                dataLabels: {
+                    enabled: true
+                }
+            }
+        },
+            legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'top',
+            x: -40,
+            y: 80,
+            floating: true,
+            borderWidth: 1,
+            backgroundColor:
+                Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
+            shadow: true
+        },
+            credits: {
+            enabled: false
+        },
+            series: [{
+                name: '属',
+                data: {{ sample_genus_count| safe}}
+            }]
+        });
+
+    </script>
+    <script type="text/javascript">
+
+        Highcharts.chart('species_sample_count', {
+            chart: {
+                type: 'bar'
+            },
+            title: {
+                text: '有效样本数 {{sample_species_total|length}}'
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: {
+                categories: {{ sample_species_name| safe}},
+            title: {
+            text: '种'
+        }
+                },
+            yAxis: {
+            min: 0,
+            title: {
+                text: '样本数',
+                align: 'high'
+            },
+            labels: {
+                overflow: 'justify'
+            }
+        },
+            tooltip: {
+            valueSuffix: ''
+        },
+            plotOptions: {
+            bar: {
+                dataLabels: {
+                    enabled: true
+                }
+            }
+        },
+            legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'top',
+            x: -40,
+            y: 80,
+            floating: true,
+            borderWidth: 1,
+            backgroundColor:
+                Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
+            shadow: true
+        },
+            credits: {
+            enabled: false
+        },
+            series: [{
+                name: '种',
+                data: {{ sample_species_count| safe}}
+                }]
+            });
+
+        Highcharts.chart('subspecies_sample_count', {
+            chart: {
+                type: 'bar'
+            },
+            title: {
+                text: '有效样本数 {{sample_subspecies_total|length}}'
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: {
+                categories: {{ sample_subspecies_name| safe}},
+            title: {
+            text: '亚种'
+        }
+                },
+            yAxis: {
+            min: 0,
+            title: {
+                text: '样本数',
+                align: 'high'
+            },
+            labels: {
+                overflow: 'justify'
+            }
+        },
+            tooltip: {
+            valueSuffix: ''
+        },
+            plotOptions: {
+            bar: {
+                dataLabels: {
+                    enabled: true
+                }
+            }
+        },
+            legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'top',
+            x: -40,
+            y: 80,
+            floating: true,
+            borderWidth: 1,
+            backgroundColor:
+                Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
+            shadow: true
+        },
+            credits: {
+            enabled: false
+        },
+            series: [{
+                name: '亚种',
+                data: {{ sample_subspecies_count| safe}}
+                }]
+            });
+
+
+        Highcharts.chart('breed_sample_count', {
+            chart: {
+                type: 'bar'
+            },
+            title: {
+                text: '有效样本数 {{sample_breed_total|length}}'
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: {
+                categories: {{ sample_breed_name| safe}},
+            title: {
+            text: '品种'
+        }
+                },
+            yAxis: {
+            min: 0,
+            title: {
+                text: '样本数',
+                align: 'high'
+            },
+            labels: {
+                overflow: 'justify'
+            }
+        },
+            tooltip: {
+            valueSuffix: ''
+        },
+            plotOptions: {
+            bar: {
+                dataLabels: {
+                    enabled: true
+                }
+            }
+        },
+            legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'top',
+            x: -40,
+            y: 80,
+            floating: true,
+            borderWidth: 1,
+            backgroundColor:
+                Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
+            shadow: true
+        },
+            credits: {
+            enabled: false
+        },
+            series: [{
+                name: '品种',
+                data: {{ sample_breed_count| safe}}
+                }]
+            });
+
+
+    </script>
+    {% endblock %}

@@ -1,0 +1,182 @@
+<button onclick="myFunction()" class="btn btn-warning my-2 float-right">显示/隐藏 表格</button>
+<div id="myDIV">
+    {% include "sample_list_table.html" %}
+</div>
+
+<script>
+    function myFunction() {
+        var x = document.getElementById("myDIV");
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
+    }
+</script>
+
+
+-- 数据下载按钮，下载queryset
+https://github.com/azavea/django-queryset-csv
+
+** in view.py
+from djqscsv import render_to_csv_response
+
+class (listview)
+def get(self, request, **kwargs):
+# check for format query key in url (my/url/?format=csv)
+self.format = request.GET.get('format', False)
+if self.format == 'csv':
+return render_to_csv_response(self.get_queryset())
+
+return super(SampleHomeView, self).get(request, **kwargs)
+
+** in html
+<button class="btn btn-info myButton">数据下载</button>
+
+<script>
+    $('.myButton').on('click', function (e) {
+        var url = window.location.href;
+        url += "&format=csv"
+        window.location.href = url;
+    });
+</script>
+--
+
+
+turn list of tuple into json
+>>> import json
+>>> lst = [("name", "value"), ("name2", "value2")]
+>>> rs = json.dumps(dict(lst))
+>>> print rs
+{"name2": "value2", "name": "value"}
+
+
+turn list of dict into json
+>>> import json
+>>> rs = json.dumps(list_of_dict)
+
+turn queryset to list, use .values() method
+>>> Blog.objects.values()
+[{'id': 1, 'name': 'Beatles Blog', 'tagline': 'All the latest Beatles news.'}],
+>>> Blog.objects.values('id', 'name')
+[{'id': 1, 'name': 'Beatles Blog'}]
+
+Note: the result is a QuerySet which mostly behaves like a list, but isn't actually an instance of list. Use
+list(Blog.objects.values(…)) if you really need an instance of list.
+
+turn valuesqueryset to list
+list(valuesqueryset) //valuesqueryset is list of dict, but should turn into list implicitly
+
+turn valueslistquerset to list
+list(valueslistqueryset) //valueslistqueryset is list of tuple, but should turn into list implicitly
+
+count queryset
+
+# Total number of books.
+>>> Book.objects.count()
+2452
+
+# Total number of books with publisher=BaloneyPress
+>>> Book.objects.filter(publisher__name='BaloneyPress').count()
+73
+
+# Average price across all books.
+>>> from django.db.models import Avg
+>>> Book.objects.all().aggregate(Avg('price'))
+{'price__avg': 34.35}
+
+# Max price across all books.
+>>> from django.db.models import Max
+>>> Book.objects.all().aggregate(Max('price'))
+{'price__max': Decimal('81.20')}
+
+from django.db.models import Count
+
+fieldname = 'myCharField'
+MyModel.objects.values(fieldname)
+.order_by(fieldname)
+.annotate(the_count=Count(fieldname))
+
+from django.db.models import Count
+Sample.objects.values('latitude','longitude','exact_site').annotate(geo_count=Count(
+...: 'id')).order_by('-geo_count')
+
+
+from collections import Counter
+location = [(sample.latitude, sample.longitude, sample.exact_site)
+for sample in self.sample_filter.qs if sample.longitude is not None]
+location_count = Counter(location)
+new_location_count = {str(list(k)): j for k,
+j in location_count.items()}
+
+
+You want to find users whose names have not been repeated. You can do this like this
+
+distinct = User.objects.values(
+'first_name'
+).annotate(
+name_count=Count('first_name')
+).filter(name_count=1)
+records = User.objects.filter(first_name__in=[item['first_name'] for item in distinct])
+
+dataset = Passenger.objects \
+.values('ticket_class') \
+.annotate(survived_count=Count('ticket_class', filter=Q(survived=True)),
+not_survived_count=Count('ticket_class', filter=Q(survived=False))) \
+.order_by('ticket_class')
+
+
+
+
+Whenever possible, try to avoid interacting with JavaScript code using the Django Template Language. Prefer returning
+the data as JSON objects already processed and ready to use.
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Django Highcharts Example</title>
+</head>
+
+<body>
+    <div id="container" data-url="{% url 'chart_data' %}"></div>
+    <script src="https://code.highcharts.com/highcharts.src.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+        $.ajax({
+            url: $("#container").attr("data-url"),
+            dataType: 'json',
+            success: function (data) {
+                Highcharts.chart("container", data);
+            }
+        });
+    </script>
+</body>
+
+</html>
+
+chart = {
+'chart': {'type': 'pie'},
+'title': {'text': 'Titanic Survivors by Ticket Class'},
+'series': [{
+'name': 'Embarkation Port',
+'data': list(map(lambda row: {'name': port_display_name[row['embarked']], 'y': row['total']}, dataset))
+}]
+}
+
+return JsonResponse(chart)
+
+
+map.enableScrollWheelZoom(true);
+
+
+<div class="row">
+
+    {% autoescape off %}
+    {{ plot_div }}
+    {% endautoescape %}
+    <!-- Content Row -->
+    <!-- Divider -->
+
+</div>
+<!-- /.container-fluid -->

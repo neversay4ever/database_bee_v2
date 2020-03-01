@@ -1,0 +1,334 @@
+{% extends '_base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load paginate_filter_tags %}
+{% load widget_tweaks %}
+
+
+{% block css %}
+
+<style>
+    .table-responsive {
+        white-space: nowrap;
+        width: 1000px;
+        max-width: 1000px;
+        overflow-x: scroll;
+    }
+
+    .sidebar {
+        height: 100%;
+        position: relative;
+        overflow-y: scroll;
+    }
+</style>
+
+<link rel="stylesheet" href="{% static 'css/bootstrap-treeview.min.css' %}">
+
+{% endblock css%}
+
+{% block title %}Sample homepage{% endblock title %}
+
+
+
+
+{% block content %}
+
+<div id="wrapper">
+    <!-- Sidebar -->
+    <div class="sticky-top">
+        <ul class=" navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+            <!-- Sidebar - Brand -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
+                <div class="sidebar-brand-icon rotate-n-15">
+                    <i class="fas fa-laugh-wink"></i>
+                </div>
+                <div class="sidebar-brand-text mx-3">Samples</div>
+            </a>
+
+            <!-- Divider -->
+
+
+            <!-- Divider -->
+            <hr class="sidebar-divider my-0">
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo1"
+                    aria-expanded="true" aria-controls="collapseTwo1">
+                    <i class="fas fa-fw fa-filter"></i>
+                    <span>Storage Filter</span>
+                </a>
+                <div id="collapseTwo1" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class='w-32 items-center text-indigo-300 text-xs'>
+                        <form method="get">
+                            <label
+                                for="{{ sample_filter.form.dissection_state.id_for_label }}">{{ sample_filter.form.dissection_state.label }}</label>
+                            <p>{{ sample_filter.form.dissection_state }}</p>
+                            <label
+                                for="{{ sample_filter.form.headchest_store.id_for_label }}">{{ sample_filter.form.headchest_store.label }}</label>
+                            <p>{{ sample_filter.form.headchest_store}}</p>
+                            <label
+                                for="{{ sample_filter.form.abdomen_store.id_for_label }}">{{ sample_filter.form.abdomen_store.label }}</label>
+                            <p>{{ sample_filter.form.abdomen_store}}</p>
+                            <label
+                                for="{{ sample_filter.form.gut_store.id_for_label }}">{{ sample_filter.form.gut_store.label }}</label>
+                            <p>{{ sample_filter.form.gut_store}}</p>
+                            <label
+                                for="{{ sample_filter.form.gut_usage.id_for_label }}">{{ sample_filter.form.gut_usage.label }}</label>
+                            <p>{{ sample_filter.form.gut_usage}}</p>
+                            <label
+                                for="{{ sample_filter.form.leg_store.id_for_label }}">{{ sample_filter.form.leg_store.label }}</label>
+                            <p>{{ sample_filter.form.leg_store}}</p>
+                            <button type="submit"
+                                class="bg-transparent hover:bg-blue-500 text-yellow-300 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </li>
+            <!-- Nav Item - Dashboard -->
+            <li class="nav-item active">
+                <a class="nav-link" role='button' onclick="dashboard_status()">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Dashboard</span></a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                分类学
+            </div>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo2"
+                    aria-expanded="true" aria-controls="collapseTwo2">
+                    <i class="fas fa-fw fa-filter"></i>
+                    <span>Taxonomy Filter</span>
+                </a>
+                <div id="collapseTwo2" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class='w-32 items-center text-indigo-300 text-xs'>
+                        <form method="get">
+                            <label
+                                for="{{ sample_filter.form.sample_class.id_for_label }}">{{ sample_filter.form.sample_class.label }}</label>
+                            <p>{{ sample_filter.form.sample_class}}</p>
+                            <label
+                                for="{{ sample_filter.form.sample_order.id_for_label }}">{{ sample_filter.form.sample_order.label }}</label>
+                            <p>{{ sample_filter.form.sample_order}}</p>
+                            <label
+                                for="{{ sample_filter.form.sample_family.id_for_label }}">{{ sample_filter.form.sample_family.label }}</label>
+                            <p>{{ sample_filter.form.sample_family}}</p>
+                            <label
+                                for="{{ sample_filter.form.sample_genus.id_for_label }}">{{ sample_filter.form.sample_genus.label }}</label>
+                            <p>{{ sample_filter.form.sample_genus}}</p>
+                            <label
+                                for="{{ sample_filter.form.sample_species.id_for_label }}">{{ sample_filter.form.sample_species.label }}</label>
+                            <p>{{ sample_filter.form.sample_species}}</p>
+                            <label
+                                for="{{ sample_filter.form.sample_subspecies.id_for_label }}">{{ sample_filter.form.sample_subspecies.label }}</label>
+                            <p>{{ sample_filter.form.sample_subspecies}}</p>
+                            <label
+                                for="{{ sample_filter.form.sample_breed.id_for_label }}">{{ sample_filter.form.sample_breed.label }}</label>
+                            <p>{{ sample_filter.form.sample_breed}}</p>
+                            <label
+                                for="{{ sample_filter.form.identifier_name.id_for_label }}">{{ sample_filter.form.identifier_name.label }}</label>
+                            <p>{{ sample_filter.form.identifier_name}}</p>
+                            <button type="submit"
+                                class="bg-transparent hover:bg-blue-500 text-yellow-300 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" role='button' onclick="taxonomy_status()">
+                    <i class="fas fa-chart-line"></i>
+                    <span>分类统计</span></a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                地理位置
+            </div>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo3"
+                    aria-expanded="true" aria-controls="collapseTwo3">
+                    <i class="fas fa-fw fa-filter"></i>
+                    <span>Location Filter</span>
+                </a>
+                <div id="collapseTwo3" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class='w-32 items-center text-indigo-300 text-xs'>
+                        <form method="get">
+                            <label
+                                for="{{ sample_filter.form.continent_ocean.id_for_label }}">{{ sample_filter.form.continent_ocean.label }}</label>
+                            <p>{{ sample_filter.form.continent_ocean}}</p>
+                            <label
+                                for="{{ sample_filter.form.country.id_for_label }}">{{ sample_filter.form.country.label }}</label>
+                            <p>{{ sample_filter.form.country}}</p>
+                            <label
+                                for="{{ sample_filter.form.state_province.id_for_label }}">{{ sample_filter.form.state_province.label }}</label>
+                            <p>{{ sample_filter.form.state_province}}</p>
+                            <label
+                                for="{{ sample_filter.form.city.id_for_label }}">{{ sample_filter.form.city.label }}</label>
+                            <p>{{ sample_filter.form.city}}</p>
+                            <label
+                                for="{{ sample_filter.form.county.id_for_label }}">{{ sample_filter.form.county.label }}</label>
+                            <p>{{ sample_filter.form.county}}</p>
+                            <label
+                                for="{{ sample_filter.form.latitude.id_for_label }}">{{ sample_filter.form.latitude.label }}</label>
+                            <p>{{ sample_filter.form.latitude}}</p>
+                            <label
+                                for="{{ sample_filter.form.longitude.id_for_label }}">{{ sample_filter.form.longitude.label }}</label>
+                            <p>{{ sample_filter.form.longitude}}</p>
+                            <label
+                                for="{{ sample_filter.form.elevation.id_for_label }}">{{ sample_filter.form.elevation.label }}</label>
+                            <p>{{ sample_filter.form.elevation}}</p>
+                            <label
+                                for="{{ sample_filter.form.exact_site.id_for_label }}">{{ sample_filter.form.exact_site.label }}</label>
+                            <p>{{ sample_filter.form.exact_site}}</p>
+                            <button type="submit"
+                                class="bg-transparent hover:bg-blue-500 text-yellow-300 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </li>
+            <!-- Nav Item - Charts -->
+            <li class="nav-item active">
+                <a class="nav-link" role='button' onclick="geo_status()">>
+                    <i class="fas fa-map-marked-alt"></i>
+                    <span>地理统计</span></a>
+            </li>
+
+            <!-- Nav Item - Tables -->
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                表格下载
+            </div>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo4"
+                    aria-expanded="true" aria-controls="collapseTwo4">
+                    <i class="fas fa-fw fa-filter"></i>
+                    <span>Collcection Filter</span>
+                </a>
+                <div id="collapseTwo4" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class='w-32 items-center text-indigo-300 text-xs'>
+                        <form method="get">
+                            <label
+                                for="{{ sample_filter.form.collector_name.id_for_label }}">{{ sample_filter.form.collector_name.label }}</label>
+                            <p>{{ sample_filter.form.collector_name}}</p>
+                            <label
+                                for="{{ sample_filter.form.bee_type.id_for_label }}">{{ sample_filter.form.bee_type.label }}</label>
+                            <p>{{ sample_filter.form.bee_type}}</p>
+                            <label
+                                for="{{ sample_filter.form.life_style.id_for_label }}">{{ sample_filter.form.life_style.label }}</label>
+                            <p>{{ sample_filter.form.life_style}}</p>
+                            <button type="submit"
+                                class="bg-transparent hover:bg-blue-500 text-yellow-300 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" role='button' onclick="table_status()">>
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Tables</span></a>
+            </li>
+        </ul>
+    </div>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column mr-3">
+        <!-- Main Content -->
+        <div id="content">
+            <!-- Topbar -->
+            <nav class="sticky justify-center navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                <!-- Topbar Search -->
+                <form method='get'
+                    class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                    <div class="input-group">
+                        <input name='q' type="text" class="form-control bg-light border-0 small"
+                            placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="submit">
+                                <i class="fas fa-search fa-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                        class="fas fa-download fa-sm text-white-50"></i> Download</a>
+            </nav>
+            <!-- End of Topbar -->
+
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+                <!-- Page Heading -->
+
+                <div id='dashboard_page'>
+                    {% include 'sample_home__dashboard_page.html' %}
+                </div>
+
+                <div id='taxonomy_page'>
+                    {% include "sample_home__taxonomy_page.html" %}
+                </div>
+
+                <div id='geo_page'>
+                    {% include "sample_home__geo_page.html" %}
+                </div>
+
+                <div id='table_page'>
+                    {% include "sample_home__table_page.html" %}
+                </div>
+
+            </div>
+            <!-- End of Page Content -->
+        </div>
+        <!-- End of Main Content -->
+    </div>
+
+</div>
+<!-- End of Content Wrapper -->
+
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+
+
+<script>
+
+    function dashboard_status() {
+        document.getElementById("dashboard_page").style.display = "block";
+        document.getElementById("taxonomy_page").style.display = "none";
+        document.getElementById("geo_page").style.display = "none";
+        document.getElementById("filter_page").style.display = "none";
+    }
+
+    function taxonomy_status() {
+        document.getElementById("dashboard_page").style.display = "none";
+        document.getElementById("taxonomy_page").style.display = "block";
+        document.getElementById("geo_page").style.display = "none";
+        document.getElementById("table_page").style.display = "none";
+    }
+
+    function geo_status() {
+        document.getElementById("dashboard_page").style.display = "none";
+        document.getElementById("taxonomy_page").style.display = "none";
+        document.getElementById("geo_page").style.display = "block";
+        document.getElementById("table_page").style.display = "none";
+    }
+
+    function table_status() {
+        document.getElementById("dashboard_page").style.display = "none";
+        document.getElementById("taxonomy_page").style.display = "none";
+        document.getElementById("geo_page").style.display = "none";
+        document.getElementById("table_page").style.display = "block";
+    }
+
+
+</script>
+{% endblock content %}
