@@ -5,9 +5,9 @@ from plotly.offline import plot
 import plotly.graph_objs as go
 import plotly.express as px
 import pandas as pd
-from database_bee.settings import BASE_DIR
+from django.conf import settings
 
-freezer_csv = os.path.join(BASE_DIR, 'sample/freezer.csv')
+freezer_csv = os.path.join(settings.BASE_DIR, 'sample/freezer.csv')
 with open(freezer_csv) as csv_file:
     df_freezer = pd.read_csv(csv_file)
     df_freezer["freezer"] = "freezer"

@@ -45,9 +45,6 @@ INSTALLED_APPS = [
     'djangoql',
     'django_filters',
     'widget_tweaks',
-    'django_extensions',
-    'bootstrap_pagination',
-    'djgeojson',
 
 
     'sample',
