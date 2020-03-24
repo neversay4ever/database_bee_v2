@@ -49,11 +49,6 @@ INSTALLED_APPS = [
 
     'sample',
     'strain',
-    'molecular',
-    'data',
-    'pipeline',
-    'tool',
-    'paper',
 
     'webpage',
 ]
