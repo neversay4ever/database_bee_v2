@@ -1,21 +1,254 @@
+{% block css %}
+{{superblock}}
+<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.css' rel='stylesheet' />
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    #map {
+        height: 400px;
+    }
+
+    .Apis_andreniformis {
+        /* Basic layout */
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        /* A little styling */
+        border: .05em solid #fff;
+        box-shadow: 0 .075em .2em .05em rgba(0, 0, 0, .25);
+
+        /* fixes a minor clipping issue in Chrome */
+        background-origin: border-box;
+        background-image: conic-gradient(rgba(254, 215, 215, 0.8) calc(3.6deg * var(--segment1)),
+                rgba(245, 101, 101, 0.8) 0 calc(3.6deg * var(--segment2)),
+                #000 0);
+    }
+
+    .Apis_cerana {
+        /* Basic layout */
+        display: inline-block;
+
+        border-radius: 50%;
+        /* A little styling */
+        border: .05em solid #fff;
+        box-shadow: 0 .075em .2em .05em rgba(0, 0, 0, .25);
+
+        /* fixes a minor clipping issue in Chrome */
+        background-origin: border-box;
+        background-image: conic-gradient(rgba(254, 235, 200, 0.8) calc(3.6deg * var(--segment1)),
+                rgba(156, 66, 33, 0.8) 0 calc(3.6deg * var(--segment2)),
+                #ed8936 0);
+    }
+
+    .Apis_d.binghami {
+        /* Basic layout */
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        /* A little styling */
+        border: .05em solid #fff;
+        box-shadow: 0 .075em .2em .05em rgba(0, 0, 0, .25);
+
+        /* fixes a minor clipping issue in Chrome */
+        background-origin: border-box;
+        background-image: conic-gradient(rgba(254, 252, 191, 0.8) calc(3.6deg * var(--segment1)),
+                rgba(236, 201, 75, 0.8) 0 calc(3.6deg * var(--segment2)),
+                #48bb78 0);
+    }
+
+    .Apis_dorsata {
+        /* Basic layout */
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        /* A little styling */
+        border: .05em solid #fff;
+        box-shadow: 0 .075em .2em .05em rgba(0, 0, 0, .25);
+
+        /* fixes a minor clipping issue in Chrome */
+        background-origin: border-box;
+        background-image: conic-gradient(rgba(254, 252, 191, 0.8) calc(3.6deg * var(--segment1)),
+                rgba(236, 201, 75, 0.8) 0 calc(3.6deg * var(--segment2)),
+                #48bb78 0);
+    }
+
+    .Apis_florea {
+        /* Basic layout */
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        /* A little styling */
+        border: .05em solid #fff;
+        box-shadow: 0 .075em .2em .05em rgba(0, 0, 0, .25);
+
+        /* fixes a minor clipping issue in Chrome */
+        background-origin: border-box;
+        background-image: conic-gradient(rgba(198, 246, 213, 0.8) calc(3.6deg * var(--segment1)),
+                rgba(72, 187, 120, 0.8) 0 calc(3.6deg * var(--segment2)),
+                #717A84 0);
+    }
+
+    .Apis_koschevnikovi {
+        /* Basic layout */
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        /* A little styling */
+        border: .05em solid #fff;
+        box-shadow: 0 .075em .2em .05em rgba(0, 0, 0, .25);
+
+        /* fixes a minor clipping issue in Chrome */
+        background-origin: border-box;
+        background-image: conic-gradient(rgba(178, 245, 234, 0.8) calc(3.6deg * var(--segment1)),
+                rgba(56, 178, 172, 0.8) 0 calc(3.6deg * var(--segment2)),
+                #f6e05e 0);
+    }
+
+    .Apis_laboriosa {
+        /* Basic layout */
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        /* A little styling */
+        border: .05em solid #fff;
+        box-shadow: 0 .075em .2em .05em rgba(0, 0, 0, .25);
+
+        /* fixes a minor clipping issue in Chrome */
+        background-origin: border-box;
+        background-image: conic-gradient(rgba(190, 227, 248, 0.8) calc(3.6deg * var(--segment1)),
+                rgba(66, 153, 225, 0.8) 0 calc(3.6deg * var(--segment2)),
+                #4299e1 0);
+    }
+
+    .Apis_mellifera {
+        /* Basic layout */
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        /* A little styling */
+        border: .05em solid #fff;
+        box-shadow: 0 .075em .2em .05em rgba(0, 0, 0, .25);
+
+        /* fixes a minor clipping issue in Chrome */
+        background-origin: border-box;
+        background-image: conic-gradient(rgba(195, 218, 254, 0.8) calc(3.6deg * var(--segment1)),
+                rgba(102, 126, 234, 0.8) 0 calc(3.6deg * var(--segment2)),
+                #e53e3e 0);
+    }
+
+    .Apis_nigrocincta {
+        /* Basic layout */
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        /* A little styling */
+        border: .05em solid #fff;
+        box-shadow: 0 .075em .2em .05em rgba(0, 0, 0, .25);
+
+        /* fixes a minor clipping issue in Chrome */
+        background-origin: border-box;
+        background-image: conic-gradient(rgba(233, 216, 253, 0.8) calc(3.6deg * var(--segment1)),
+                rgba(159, 122, 234, 0.8) 0 calc(3.6deg * var(--segment2)),
+                #d69e2e 0);
+    }
+
+    .Apis_nuluensis {
+        /* Basic layout */
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        /* A little styling */
+        border: .05em solid #fff;
+        box-shadow: 0 .075em .2em .05em rgba(0, 0, 0, .25);
+
+        /* fixes a minor clipping issue in Chrome */
+        background-origin: border-box;
+        background-image: conic-gradient(rgba(254, 215, 226, 0.8) calc(3.6deg * var(--segment1)),
+                rgba(237, 100, 166, 0.8) 0 calc(3.6deg * var(--segment2)),
+                #feb2b2 0);
+    }
+
+    .marker {
+        background-image: url('./bees-gut.svg');
+        background-size: cover;
+        width: 40px;
+        height: 40px;
+        border-radius: 10%;
+        cursor: pointer;
+        opacity: 0.8;
+    }
+
+    .mapboxgl-popup {
+        max-width: 200px;
+    }
+
+    .mapboxgl-popup-content {
+        text-align: center;
+        font-family: 'Open Sans', sans-serif;
+    }
+</style>
+
+{% endblock css%}
+
 <div class='container'>
-    {% autoescape off %}
-    {{ treemap_count_geo_plt_div }}
-    {% endautoescape %}
+    <div id='map'></div>
 
-    {% autoescape off %}
-    {{ continent_bar_plt_div }}
-    {% endautoescape %}
+    <script>
+        var geojson = {{ sample_geo_json| safe}};
 
-    {% autoescape off %}
-    {{ country_bar_plt_div }}
-    {% endautoescape %}
+        mapboxgl.accessToken = 'pk.eyJ1IjoibmV2ZXJzYXk0ZXZlciIsImEiOiJjazcxOWZndmYwNDVoM21tbHliaWtlMWxiIn0.dC_Ju9EeWHNjeWI-lWOttQ';
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/neversay4ever/ck7wpchn904ud1iqawriwx8dr',
+            center: [110, 28],
+            zoom: 3
+        });
 
-    {% autoescape off %}
-    {{ province_bar_plt_div }}
-    {% endautoescape %}
+        geojson.features.forEach(function (marker) {
 
-    {% autoescape off %}
-    {{ city_bar_plt_div }}
-    {% endautoescape %}
+            // create a HTML element for each feature
+
+            // make a marker for each feature and add to the map
+
+            var el = document.createElement('div');
+            el.className = marker.properties['sample_species'].split(' ').join('_');
+
+
+            var scale = 8;
+            if (marker.properties['count'] > 100) {
+                scale = 20;
+            } else if (marker.properties['count'] > 50) {
+                scale = 15;
+            } else if (marker.properties['count'] > 10) {
+                scale = 12;
+            }
+            el.style = "height:" + scale + "px;" + "width:" + scale + "px;" + "--segment1:" + 0 + "; --segment2:" + 0 + ";"
+
+            new mapboxgl.Marker(el, {
+                offset: [-scale / 2, -scale]
+            })
+                .setLngLat(marker.geometry.coordinates)
+                .addTo(map);
+
+            new mapboxgl.Marker(el)
+                .setLngLat(marker.geometry.coordinates)
+                .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
+                    .setHTML('<h3>' + marker.properties['sample_species'] + '</h3><p>' + marker.geometry.coordinates[0] + "," + marker.geometry.coordinates[1] + '</p><p>' + marker.properties['count'] + '</p>'))
+                .addTo(map);
+        });
+    </script>
 </div>
